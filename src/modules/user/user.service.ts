@@ -40,7 +40,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {}
 
   findAll() {
-    return `This action returns all user`;
+    return this.userDb;
   }
 
   findOne(id: number) {
