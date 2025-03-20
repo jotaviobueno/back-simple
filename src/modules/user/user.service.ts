@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -44,7 +44,11 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    const user = this.userDb.find((user) => user.id === id);
+
+    if (!user) throw new HttpException('User not found', 404);
+
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
@@ -52,6 +56,12 @@ export class UserService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    const user = this.userDb.findIndex((user) => user.id === id);
+
+    if (user === -1) throw new HttpException('User not found', 404);
+
+    const remove = this.userDb.splice(user, 1);
+
+    return remove;
   }
 }
